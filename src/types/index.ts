@@ -1,12 +1,16 @@
-export interface Post {
-  postId: number;
-  id: number;
+export interface Pokemon {
   name: string;
-  email: string;
-  body: string;
+  url: string;
 }
 
 export interface TableProps {
-  dataSource: Post[];
+  dataSource: Pokemon[];
   title: string;
+}
+
+export interface GetPokemons {
+  count: number;
+  next: string;
+  previous: string;
+  results: Pokemon[];
 }

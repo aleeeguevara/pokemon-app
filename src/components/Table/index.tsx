@@ -1,4 +1,5 @@
 // 3rd parties
+import axios, { AxiosResponse } from 'axios';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import TableMU from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,11 +9,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { TablePagination } from '@material-ui/core';
+import Link from '@material-ui/core/Link';
 import { ChangeEvent, useState } from 'react';
 
 // Local
 import { Title } from './styles';
-import { Post, TableProps } from '../../types';
+import { Pokemon, TableProps } from '../../types';
+import { ModalPokemon } from '../ModalPokemon';
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -35,6 +38,8 @@ const useStyles = makeStyles({
 export const Table = ({ dataSource, title }: TableProps) => {
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
+  const [pokemon, setPokemon] = useState<any>();
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -44,6 +49,20 @@ export const Table = ({ dataSource, title }: TableProps) => {
     setRowsPerPage(parseInt(event.target.value, 10));
 
     setPage(0);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const getPokemonInfo = async (url: string) => {
+    const response: AxiosResponse<any> = await axios.get(url);
+
+    setPokemon(response.data);
   };
 
   const classes = useStyles();
@@ -57,29 +76,30 @@ export const Table = ({ dataSource, title }: TableProps) => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Name</StyledTableCell>
-
-              <StyledTableCell align="right">E-mail</StyledTableCell>
-
-              <StyledTableCell align="right">Content</StyledTableCell>
+              <StyledTableCell>Info</StyledTableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
             {dataSource
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((item: Post) => (
+              .map((item: Pokemon) => (
                 <TableRow key={item.name}>
                   <TableCell component="th" scope="post">
                     {item.name}
-                  </TableCell>
-                  
-                  <TableCell align="right">
-                    {item.email}
-                  </TableCell>
-                  
-                  <TableCell align="right">
-                    {item.body}
-                  </TableCell>
+                  </TableCell>                  
+                  <TableCell component="th" scope="post">
+                    <Link
+                      component="button"
+                      variant="body2"
+                      onClick={()=> {
+                        getPokemonInfo(item.url)
+                        handleOpen()
+                      }}
+                    >
+                      See More
+                    </Link>  
+                  </TableCell>                  
                 </TableRow>
             ))}
           </TableBody>
@@ -95,6 +115,8 @@ export const Table = ({ dataSource, title }: TableProps) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+
+      {pokemon && <ModalPokemon pokemon={pokemon} open={open} handleClose={handleClose} />}
     </>
   )
 }

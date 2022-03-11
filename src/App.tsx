@@ -5,15 +5,15 @@ import { Container, StylesProvider } from '@material-ui/core';
 import { Table } from './components/Table';
 
 // Hooks
-import { usePosts } from './hooks/usePosts';
+import { usePokemons } from './hooks/usePokemons';
 
 export default function AppPage() {
-  const posts = usePosts();
+  const pokemons = usePokemons();
 
   return (
     <StylesProvider injectFirst>
       <Container>
-        <Table dataSource={posts} title="Table Pagination" />
+        <Table dataSource={pokemons} title="Pokemons" />
       </Container>
     </StylesProvider>  
   );
