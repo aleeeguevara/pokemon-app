@@ -57,6 +57,7 @@ export const Table = ({ dataSource, title }: TableProps) => {
 
   const handleClose = () => {
     setOpen(false);
+    setPokemon(undefined);
   };
 
   const getPokemonInfo = async (url: string) => {
