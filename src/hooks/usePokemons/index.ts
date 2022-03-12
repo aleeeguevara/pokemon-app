@@ -9,13 +9,11 @@ export const usePokemons = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
   useEffect(() => {
-    const fetchPokemons = async ()  => {
+    (async () => {
       const response: AxiosResponse<GetPokemons> = await axios.get(GET_POKEMONS);
 
       setPokemons(response.data.results)
-    }
-  
-    fetchPokemons();
+    })()
   }, []);
 
   return pokemons;
