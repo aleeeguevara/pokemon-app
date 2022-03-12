@@ -1,20 +1,25 @@
 // 3rd parties
-import { Container, StylesProvider } from '@material-ui/core';
+import { StylesProvider } from '@material-ui/core';
+import { 
+  BrowserRouter as Router,
+  Routes,
+  Route, 
+} from 'react-router-dom';
+import Page404 from './pages/Page404';
 
-// Components
-import { Table } from './components/Table';
-
-// Hooks
-import { usePokemons } from './hooks/usePokemons';
+// components
+import Home from './pages/Home';
 
 export default function AppPage() {
-  const pokemons = usePokemons();
 
   return (
     <StylesProvider injectFirst>
-      <Container>
-        <Table dataSource={pokemons} title="Pokemons" />
-      </Container>
+      <Router>
+        <Routes>
+          <Route element={<Home />} path="/" />
+          <Route element={<Page404 />} path="*"/>
+        </Routes>
+      </Router>
     </StylesProvider>  
   );
 }
