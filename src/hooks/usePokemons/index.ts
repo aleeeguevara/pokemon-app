@@ -1,10 +1,10 @@
 // 3rd parties
 import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
-import { GetPokemons, Pokemon } from '../../types';
+import { GetPokemons, ListPokemon } from '../../types';
 
 export const usePokemons = () => {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const [pokemons, setPokemons] = useState<ListPokemon[]>([]);
 
   useEffect(() => {
     (async () => {

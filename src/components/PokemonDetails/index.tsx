@@ -13,15 +13,16 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 
 // App
+import { Pokemon } from '../../types';
 import { joinItems } from '../../utils/joinItems';
 
-export interface ModalPokemonProps {
-  pokemon: any;
+export interface PokemonDetailsProps {
+  pokemon: Pokemon;
   open: boolean;
   handleClose: ()=>void;
 }
 
-export const ModalPokemon = ({ pokemon, open, handleClose }: ModalPokemonProps) => {  
+export const PokemonDetails = ({ pokemon, open, handleClose }: PokemonDetailsProps) => {  
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 

@@ -14,8 +14,8 @@ import { ChangeEvent, useState } from 'react';
 
 // Local
 import { Title } from './styles';
-import { Pokemon, TableProps } from '../../types';
-import { ModalPokemon } from '../ModalPokemon';
+import { ListPokemon, Pokemon } from '../../types';
+import { PokemonDetails } from '../PokemonDetails';
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -35,11 +35,16 @@ const useStyles = makeStyles({
   },
 });
 
-export const Table = ({ dataSource, title }: TableProps) => {
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
-  const [page, setPage] = useState<number>(0);
-  const [pokemon, setPokemon] = useState<any>();
-  const [open, setOpen] = useState<boolean>(false);
+export interface PokemonsTableProps {
+  dataSource: ListPokemon[];
+  title: string;
+}
+
+export const PokemonsTable = ({ dataSource, title }: PokemonsTableProps) => {
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
+  const [pokemon, setPokemon] = useState<Pokemon | null>();
+  const [open, setOpen] = useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -57,11 +62,11 @@ export const Table = ({ dataSource, title }: TableProps) => {
 
   const handleClose = () => {
     setOpen(false);
-    setPokemon(undefined);
+    setPokemon(null);
   };
 
   const getPokemonInfo = async (url: string) => {
-    const response: AxiosResponse<any> = await axios.get(url);
+    const response: AxiosResponse<Pokemon> = await axios.get(url);
 
     setPokemon(response.data);
   };
@@ -84,7 +89,7 @@ export const Table = ({ dataSource, title }: TableProps) => {
           <TableBody>
             {dataSource
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((item: Pokemon) => (
+              .map((item: ListPokemon) => (
                 <TableRow key={item.name}>
                   <TableCell component="th" scope="post">
                     {item.name}
@@ -117,7 +122,7 @@ export const Table = ({ dataSource, title }: TableProps) => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-      {pokemon && <ModalPokemon pokemon={pokemon} open={open} handleClose={handleClose} />}
+      {pokemon && <PokemonDetails pokemon={pokemon} open={open} handleClose={handleClose} />}
     </>
   )
 }
