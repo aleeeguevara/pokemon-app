@@ -13,11 +13,8 @@ export default function Home() {
       bgcolor="background.paper"
     >
       <h2>Sorry, this page does not exist!</h2>
-      <Link
-        href="/"
-      >
-        Back to Home
-      </Link>
+
+      <Link href="/">Back to Home</Link>
     </Box>
-    );
+  );
 }

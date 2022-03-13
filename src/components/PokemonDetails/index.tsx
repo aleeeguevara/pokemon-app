@@ -43,54 +43,65 @@ export const PokemonDetails = ({ pokemon, open, handleClose }: PokemonDetailsPro
                   <TableCell><strong>Photo</strong></TableCell>
                   <TableCell><img src={pokemon.sprites.front_default} alt={pokemon.name} /></TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Name</strong></TableCell>
                   <TableCell>{pokemon.name}</TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Species</strong></TableCell>
                   <TableCell>{pokemon.species.name}</TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Height</strong></TableCell>
                   <TableCell>{pokemon.height}</TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Weight</strong></TableCell>
                   <TableCell>{pokemon.weight}</TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Base Experience</strong></TableCell>
                   <TableCell>{pokemon.base_experience}</TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Order</strong></TableCell>
                   <TableCell>{pokemon.order}</TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Abilities</strong></TableCell>
                   <TableCell>  
                     {joinItems(pokemon.abilities, 'ability')}
                   </TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Moves</strong></TableCell>
                   <TableCell>  
                     {joinItems(pokemon.moves, 'move')}
                   </TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Types</strong></TableCell>
                   <TableCell>  
                     {joinItems(pokemon.types, 'type')}
                   </TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Stats</strong></TableCell>
                   <TableCell>  
                     {joinItems(pokemon.stats, 'stat')}
                   </TableCell>
                 </TableRow>
+
                 <TableRow>
                   <TableCell><strong>Game indices</strong></TableCell>
                   <TableCell>  
@@ -102,6 +113,7 @@ export const PokemonDetails = ({ pokemon, open, handleClose }: PokemonDetailsPro
           </TableContainer>           
         </DialogContentText>
       </DialogContent>
+
       <DialogActions>
         <Button autoFocus onClick={handleClose} color="primary">
           Close

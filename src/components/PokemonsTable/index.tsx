@@ -1,5 +1,4 @@
 // 3rd parties
-import axios, { AxiosResponse } from 'axios';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import TableMU from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,11 +9,11 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { TablePagination } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
-import { ChangeEvent, useState } from 'react';
 
 // Local
+import { usePokemons } from '../../hooks/usePokemons';
 import { Title } from './styles';
-import { ListPokemon, Pokemon } from '../../types';
+import { ListPokemon } from '../../types';
 import { PokemonDetails } from '../PokemonDetails';
 
 const StyledTableCell = withStyles((theme: Theme) =>
@@ -35,47 +34,15 @@ const useStyles = makeStyles({
   },
 });
 
-export interface PokemonsTableProps {
-  dataSource: ListPokemon[];
-  title: string;
-}
 
-export const PokemonsTable = ({ dataSource, title }: PokemonsTableProps) => {
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [page, setPage] = useState(0);
-  const [pokemon, setPokemon] = useState<Pokemon | null>();
-  const [open, setOpen] = useState(false);
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-
-    setPage(0);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setPokemon(null);
-  };
-
-  const getPokemonInfo = async (url: string) => {
-    const response: AxiosResponse<Pokemon> = await axios.get(url);
-
-    setPokemon(response.data);
-  };
+export const PokemonsTable = () => {
+  const pokemons = usePokemons();
 
   const classes = useStyles();
 
   return (
     <>
-      <Title>{title}</Title>
+      <Title>Pokemons</Title>
 
       <TableContainer component={Paper}>
         <TableMU className={classes.table} size="small" aria-label="table">
@@ -87,9 +54,7 @@ export const PokemonsTable = ({ dataSource, title }: PokemonsTableProps) => {
           </TableHead>
 
           <TableBody>
-            {dataSource
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((item: ListPokemon) => (
+            {pokemons.payload?.results.map((item: ListPokemon) => (
                 <TableRow key={item.name}>
                   <TableCell component="th" scope="post">
                     {item.name}
@@ -99,8 +64,8 @@ export const PokemonsTable = ({ dataSource, title }: PokemonsTableProps) => {
                       component="button"
                       variant="body2"
                       onClick={()=> {
-                        getPokemonInfo(item.url)
-                        handleOpen()
+                        pokemons.getPokemon(item.url)
+                        pokemons.toggleDetails()
                       }}
                     >
                       See More
@@ -112,17 +77,19 @@ export const PokemonsTable = ({ dataSource, title }: PokemonsTableProps) => {
         </TableMU>
       </TableContainer>
 
-      <TablePagination
-        rowsPerPageOptions={[10, 15, 20]}
-        component="div"
-        count={dataSource.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      {pokemons.payload && (
+        <TablePagination
+          rowsPerPageOptions={[10, 20, 30, 50, 80]}
+          component="div"
+          count={pokemons.payload.count}
+          rowsPerPage={pokemons.rowsPerPage}
+          page={pokemons.page}
+          onPageChange={pokemons.handleChangePage}
+          onRowsPerPageChange={pokemons.handleChangeRowsPerPage}
+        />
+      )}
 
-      {pokemon && <PokemonDetails pokemon={pokemon} open={open} handleClose={handleClose} />}
+      {pokemons.pokemon && <PokemonDetails pokemon={pokemons.pokemon} open={pokemons.open} handleClose={pokemons.toggleDetails} />}
     </>
   )
 }
