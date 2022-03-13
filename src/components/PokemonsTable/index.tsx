@@ -54,17 +54,17 @@ export const PokemonsTable = () => {
           </TableHead>
 
           <TableBody>
-            {pokemons.payload?.results.map((item: ListPokemon) => (
-                <TableRow key={item.name}>
+            {pokemons.payload?.results.map(({ name, url }: ListPokemon) => (
+                <TableRow key={name}>
                   <TableCell component="th" scope="post">
-                    {item.name}
+                    {name}
                   </TableCell>                  
                   <TableCell component="th" scope="post">
                     <Link
                       component="button"
                       variant="body2"
                       onClick={()=> {
-                        pokemons.getPokemon(item.url)
+                        pokemons.getPokemon(url)
                         pokemons.toggleDetails()
                       }}
                     >
