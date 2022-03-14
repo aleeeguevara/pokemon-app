@@ -34,11 +34,50 @@ const useStyles = makeStyles({
   },
 });
 
-
 export const PokemonsTable = () => {
-  const pokemons = usePokemons();
+  const {
+    getPokemon,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    open,
+    page,
+    payload,
+    pokemon,
+    rowsPerPage,
+    toggleDetails
+  } = usePokemons();
 
   const classes = useStyles();
+
+  const renderPokemons = () => {
+    if (!payload || payload.count === 0) {
+      return (
+        <TableRow>
+          <TableCell>Nenhum resultado encontrado</TableCell>
+        </TableRow>
+      )
+    }
+
+    return payload.results.map(({ name, url }: ListPokemon) => (
+      <TableRow key={name}>
+        <TableCell component="th" scope="post">
+          {name}
+        </TableCell>                  
+        <TableCell component="th" scope="post">
+          <Link
+            component="button"
+            variant="body2"
+            onClick={()=> {
+              getPokemon(url)
+              toggleDetails()
+            }}
+          >
+            See More
+          </Link>  
+        </TableCell>                  
+      </TableRow>
+  ))
+  }
 
   return (
     <>
@@ -54,42 +93,24 @@ export const PokemonsTable = () => {
           </TableHead>
 
           <TableBody>
-            {pokemons.payload?.results.map(({ name, url }: ListPokemon) => (
-                <TableRow key={name}>
-                  <TableCell component="th" scope="post">
-                    {name}
-                  </TableCell>                  
-                  <TableCell component="th" scope="post">
-                    <Link
-                      component="button"
-                      variant="body2"
-                      onClick={()=> {
-                        pokemons.getPokemon(url)
-                        pokemons.toggleDetails()
-                      }}
-                    >
-                      See More
-                    </Link>  
-                  </TableCell>                  
-                </TableRow>
-            ))}
+            {renderPokemons()}
           </TableBody>
         </TableMU>
       </TableContainer>
 
-      {pokemons.payload && (
+      {payload && (
         <TablePagination
           rowsPerPageOptions={[10, 20, 30, 50, 80]}
           component="div"
-          count={pokemons.payload.count}
-          rowsPerPage={pokemons.rowsPerPage}
-          page={pokemons.page}
-          onPageChange={pokemons.handleChangePage}
-          onRowsPerPageChange={pokemons.handleChangeRowsPerPage}
+          count={payload.count}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       )}
 
-      {pokemons.pokemon && <PokemonDetails pokemon={pokemons.pokemon} open={pokemons.open} handleClose={pokemons.toggleDetails} />}
+      {pokemon && <PokemonDetails pokemon={pokemon} open={open} handleClose={toggleDetails} />}
     </>
   )
 }
